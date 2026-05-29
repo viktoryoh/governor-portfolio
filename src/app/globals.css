@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+html,
+body {
+  background: #f8faf8;
+  color: #0f172a;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+}
+@keyframes heroFloat {
+  0% {
+    transform: translateY(0px) scale(1);
+  }
+
+  50% {
+    transform: translateY(-18px) scale(1.015);
+  }
+
+  100% {
+    transform: translateY(0px) scale(1);
+  }
+}
+
+.hero-image-motion {
+  animation: heroFloat 7s ease-in-out infinite;
+}
+
+@keyframes floatBubble {
+
+  0% {
+    transform:
+      translate3d(0px, 0px, 0)
+      scale(0.8);
+
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 0.8;
+  }
+
+  50% {
+    transform:
+      translate3d(40px, -50vh, 0)
+      scale(1);
+  }
+
+  100% {
+    transform:
+      translate3d(-20px, -120vh, 0)
+      scale(1.2);
+
+    opacity: 0;
+  }
+}
+
+.bubble {
+  animation-name: floatBubble;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+
+  transform: translate3d(0, 0, 0);
+
+  backface-visibility: hidden;
+
+  perspective: 1000px;
+
+  contain: layout style paint;
+}
+/* CINEMATIC CURSOR */
+
+html,
+body {
+  cursor: none;
+}
+
+.cinematic-cursor {
+  box-shadow:
+    0 0 20px rgba(3, 131, 71, 0.6),
+    0 0 60px rgba(3, 131, 71, 0.35);
+}
+
+.cursor-grow .cinematic-cursor {
+  transform:
+    translate(-50%, -50%)
+    scale(2.4);
+}
+select option {
+  background: #111111;
+  color: white;
+}
