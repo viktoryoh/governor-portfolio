@@ -53,7 +53,6 @@ export default function ProjectsPage() {
           src="/images/governor-1.png"
           alt="Governor"
           fill
-          sizes="100vw"
           priority
           className="
             object-cover
@@ -419,7 +418,6 @@ export default function ProjectsPage() {
         src={project.image}
         alt={project.title}
         fill
-        sizes="(max-width: 1023px) 100vw, 50vw"
         className="
           object-cover
           object-center

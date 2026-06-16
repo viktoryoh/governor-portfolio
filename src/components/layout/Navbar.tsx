@@ -29,7 +29,7 @@ export default function Navbar() {
             </p>
 
             <h2 className="text-sm md:text-base font-bold text-[#0B6B3A] tracking-[0.08em]">
-              GOVERNOR PORTFOLIO
+              GOVERNOR UMO ENO PORTFOLIO
             </h2>
           </div>
         </div>
