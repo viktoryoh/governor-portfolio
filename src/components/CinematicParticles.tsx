@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { rangedRandom } from "@/lib/seededRandom";
 
 type Particle = {
   left: number;
@@ -13,23 +13,17 @@ type Particle = {
   opacity: number;
 };
 
+const particles: Particle[] = Array.from({ length: 36 }, (_, index) => ({
+  left: rangedRandom(index + 11, 0, 100),
+  top: rangedRandom(index + 23, 0, 100),
+  size: rangedRandom(index + 37, 1, 4),
+  drift: rangedRandom(index + 41, -40, 40),
+  duration: rangedRandom(index + 53, 10, 18),
+  delay: rangedRandom(index + 67, 0, 8),
+  opacity: rangedRandom(index + 79, 0.15, 0.5),
+}));
+
 export default function CinematicParticles() {
-  const [particles, setParticles] = useState<Particle[]>([]);
-
-  useEffect(() => {
-    setParticles(
-      Array.from({ length: 36 }).map(() => ({
-        left: Math.random() * 100,
-        top: Math.random() * 100,
-        size: Math.random() * 3 + 1,
-        drift: Math.random() * 80 - 40,
-        duration: Math.random() * 8 + 10,
-        delay: Math.random() * 8,
-        opacity: Math.random() * 0.35 + 0.15,
-      }))
-    );
-  }, []);
-
   return (
     <div className="absolute inset-0 z-[2] overflow-hidden pointer-events-none">
       {particles.map((particle, index) => (

@@ -132,7 +132,7 @@ const localGovernments = [
     alt="Governor"
     fill
     sizes="100vw"
-    priority
+    loading="eager"
     className="
       object-cover
       object-center

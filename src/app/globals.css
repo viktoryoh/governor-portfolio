@@ -69,11 +69,28 @@ body {
 
   contain: layout style paint;
 }
+
+.floating-bubble {
+  background: radial-gradient(
+    circle at center,
+    rgba(3, 131, 71, 0.18),
+    rgba(255, 255, 255, 0.02)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
 /* CINEMATIC CURSOR */
 
-html,
-body {
-  cursor: none;
+@media (pointer: fine) {
+  html,
+  body {
+    cursor: none;
+  }
+}
+
+@media (pointer: coarse) {
+  .cinematic-cursor-wrap {
+    display: none;
+  }
 }
 
 .cinematic-cursor {

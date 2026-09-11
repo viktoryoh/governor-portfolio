@@ -10,6 +10,12 @@ import CinematicShader from "@/components/webgl/CinematicShader";
 import LightSweep from "@/components/atmosphere/LightSweep";
 gsap.registerPlugin(ScrollTrigger);
 
+const heroImages = [
+  "/images/governor-1.png",
+  "/images/governor-2.jpg",
+  "/images/governor-3.jpg",
+];
+
 export default function HeroSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const imageWrapperRef = useRef<HTMLDivElement>(null);
@@ -23,17 +29,11 @@ const atmosphereLayerRef = useRef<HTMLDivElement>(null);
   const continuesRef = useRef<HTMLHeadingElement>(null);
   const resultsRef = useRef<HTMLHeadingElement>(null);
   
-  const images = [
-  "/images/governor-1.png",
-  "/images/governor-2.jpg",
-  "/images/governor-3.jpg",
-];
-
 const [currentImage, setCurrentImage] = useState(0);
 
 useEffect(() => {
   const interval = setInterval(() => {
-    setCurrentImage((prev) => (prev + 1) % images.length);
+    setCurrentImage((prev) => (prev + 1) % heroImages.length);
   }, 5000);
 
   return () => clearInterval(interval);
@@ -254,14 +254,14 @@ window.addEventListener(
     overflow-hidden
   "
 >
-  {images.map((image, index) => (
+  {heroImages.map((image, index) => (
     <Image
       key={index}
       src={image}
       alt="Governor"
       fill
       sizes="100vw"
-      priority
+      loading={index === 0 ? "eager" : "lazy"}
       className={`
         object-cover
         object-center
@@ -322,11 +322,6 @@ window.addEventListener(
           bg-[radial-gradient(circle_at_center,rgba(11,107,58,0.10)_0%,rgba(0,0,0,0.35)_100%)]
         "
       />
-
-      {/* CTA BUTTON */}
-      <MagneticButton href="/projects">
-        Explore Projects
-      </MagneticButton>
 
       <div
   ref={textLayerRef}

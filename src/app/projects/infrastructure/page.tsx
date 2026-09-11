@@ -235,7 +235,7 @@ export default function InfrastructurePage() {
       alt="Governor"
       fill
       sizes="(max-width: 639px) 280px, (max-width: 767px) 360px, (max-width: 1023px) 500px, 560px"
-      priority
+      loading="eager"
       className="
         object-contain
         object-right-bottom
@@ -275,7 +275,7 @@ export default function InfrastructurePage() {
           alt="Infrastructure"
           fill
           sizes="100vw"
-          priority
+          loading="eager"
           className="object-cover object-center"
         />
 

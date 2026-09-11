@@ -35,7 +35,9 @@ const projects = [
       "Creating sustainable opportunities through education, innovation hubs, entrepreneurship, and employment programs.",
   },
 ];
-const title = "Building Lasting Impact.";
+
+const titleLines = ["Building", "Lasting Impact."];
+
 export default function ProjectsPage() {
   return (
     <main
@@ -53,7 +55,7 @@ export default function ProjectsPage() {
           src="/images/governor-1.png"
           alt="Governor"
           fill
-          priority
+          loading="eager"
           className="
             object-cover
             object-center
@@ -156,7 +158,7 @@ export default function ProjectsPage() {
 </div>
 
         {/* HERO HEADER */}
-        <section className="pt- pb-24 px-6 md:px-12 lg:px-20">
+        <section className="pt-24 pb-24 px-6 md:px-12 lg:px-20">
 
           <p
             className="
@@ -171,76 +173,61 @@ export default function ProjectsPage() {
           </p>
 
 <motion.h1
+  aria-label="Building Lasting Impact."
   className="
     max-w-[1100px]
     text-white
-    text-[16vw]
-    md:text-[8vw]
+    text-5xl
+    sm:text-6xl
+    md:text-7xl
+    lg:text-[112px]
     font-black
-    tracking-[-0.08em]
-    leading-[0.85]
+    tracking-normal
+    leading-[0.95]
   "
 >
 
-  {/* BUILDING */}
-  <div className="overflow-hidden pb-6">
-    {"Building".split("").map((char, index) => (
-      <motion.span
-        key={index}
-        initial={{
-          opacity: 0,
-          y: 120,
-          filter: "blur(10px)",
-        }}
-        animate={{
-          opacity: 1,
-          y: 0,
-          filter: "blur(0px)",
-        }}
-        transition={{
-          duration: 0.8,
-          delay: index * 0.05,
-          ease: [0.22, 1, 0.36, 1],
-        }}
-        className="
-          inline-block
-          drop-shadow-[0_0_18px_rgba(255,255,255,0.15)]
-        "
-      >
-        {char}
-      </motion.span>
-    ))}
-  </div>
-
-  {/* LASTING IMPACT */}
-  <div className="overflow-hidden pb-6">
-    {"Lasting Impact.".split("").map((char, index) => (
-      <motion.span
-        key={index}
-        initial={{
-          opacity: 0,
-          y: 120,
-          filter: "blur(10px)",
-        }}
-        animate={{
-          opacity: 1,
-          y: 0,
-          filter: "blur(0px)",
-        }}
-        transition={{
-          duration: 0.8,
-          delay: 0.5 + index * 0.05,
-          ease: [0.22, 1, 0.36, 1],
-        }}
-        className="
-          inline-block
-          drop-shadow-[0_0_18px_rgba(255,255,255,0.15)]
-        "
-      >
-        {char === " " ? "\u00A0" : char}
-      </motion.span>
-    ))}
-  </div>
+  {titleLines.map((line, lineIndex) => (
+    <span
+      key={line}
+      aria-hidden="true"
+      className="block overflow-hidden pb-4"
+    >
+      {line.split(" ").map((word, wordIndex) => (
+        <span
+          key={`${line}-${word}`}
+          className="inline-block whitespace-nowrap mr-[0.18em]"
+        >
+          {word.split("").map((char, index) => (
+            <motion.span
+              key={`${word}-${index}`}
+              initial={{
+                opacity: 0,
+                y: 120,
+                filter: "blur(10px)",
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+                filter: "blur(0px)",
+              }}
+              transition={{
+                duration: 0.8,
+                delay: lineIndex * 0.5 + (wordIndex * 8 + index) * 0.05,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="
+                inline-block
+                drop-shadow-[0_0_18px_rgba(255,255,255,0.15)]
+              "
+            >
+              {char}
+            </motion.span>
+          ))}
+        </span>
+      ))}
+    </span>
+  ))}
 
 </motion.h1>
 

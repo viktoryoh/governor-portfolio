@@ -5,18 +5,8 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import CinematicParticles from "@/components/CinematicParticles";
-import { useEffect, useRef, useState, type MouseEvent } from "react";
-export default function GovernorBiographyPage() {
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const rotateX = useTransform(mouseY, [-300, 300], [10, -10]);
-  const rotateY = useTransform(mouseX, [-300, 300], [-10, 10]);
-
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [playing, setPlaying] = useState(false);
-
-  // rest of your code...
+import { useRef, useState, type MouseEvent } from "react";
+import { rangedRandom } from "@/lib/seededRandom";
 
 type Particle = {
   left: number;
@@ -26,19 +16,23 @@ type Particle = {
   xMovement: number;
 };
 
-const [particles, setParticles] = useState<Particle[]>([]);
+const particles: Particle[] = Array.from({ length: 25 }, (_, index) => ({
+  left: rangedRandom(index + 251, 0, 100),
+  top: rangedRandom(index + 263, 0, 100),
+  duration: rangedRandom(index + 271, 8, 18),
+  delay: rangedRandom(index + 277, 0, 5),
+  xMovement: rangedRandom(index + 281, -60, 60),
+}));
 
-useEffect(() => {
-  setParticles(
-    Array.from({ length: 25 }, () => ({
-      left: Math.random() * 100,
-      top: Math.random() * 100,
-      duration: 8 + Math.random() * 10,
-      delay: Math.random() * 5,
-      xMovement: Math.random() * 120 - 60,
-    }))
-  );
-}, []);
+export default function GovernorBiographyPage() {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const rotateX = useTransform(mouseY, [-300, 300], [10, -10]);
+  const rotateY = useTransform(mouseX, [-300, 300], [-10, 10]);
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [playing, setPlaying] = useState(false);
 
 const toggleAudio = async () => {
   const audio = audioRef.current;
@@ -421,7 +415,7 @@ transition={{
   alt="Governor"
   fill
   sizes="(max-width: 767px) 420px, 520px"
-  priority
+  loading="eager"
   className="
     object-cover
     object-top

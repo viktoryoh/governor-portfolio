@@ -13,10 +13,10 @@ export default function MagneticButton({
   children,
 }: MagneticButtonProps) {
 
-  const buttonRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLAnchorElement>(null);
 
   const handleMouseMove = (
-    e: React.MouseEvent<HTMLDivElement>
+    e: React.MouseEvent<HTMLAnchorElement>
   ) => {
     const button = buttonRef.current;
 
@@ -45,76 +45,68 @@ export default function MagneticButton({
   };
 
   return (
-    <div
+    <Link
       ref={buttonRef}
+      href={href}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className="
+        group
         relative
-        transition-transform
-        duration-300
+        inline-flex
+        overflow-hidden
+        rounded-full
+        border
+        border-white/20
+        bg-white/10
+        backdrop-blur-xl
+        px-8
+        py-4
+        text-sm
+        font-semibold
+        uppercase
+        tracking-[0.2em]
+        text-white
+        transition-all
+        duration-500
         ease-out
+        hover:scale-105
+        hover:bg-[#038347]
+        hover:shadow-[0_0_40px_rgba(3,131,71,0.45)]
       "
     >
-      <Link href={href}>
-        <button
+
+      {/* Animated Shine */}
+      <div
+        className="
+          absolute
+          inset-0
+          opacity-0
+          transition-all
+          duration-700
+          group-hover:opacity-100
+        "
+      >
+        <div
           className="
-            group
-            relative
-            overflow-hidden
-            rounded-full
-            border
-            border-white/20
-            bg-white/10
-            backdrop-blur-xl
-            px-8
-            py-4
-            text-sm
-            font-semibold
-            uppercase
-            tracking-[0.2em]
-            text-white
+            absolute
+            top-0
+            left-[-120%]
+            h-full
+            w-[60%]
+            rotate-12
+            bg-white/20
+            blur-xl
             transition-all
-            duration-500
-            hover:scale-105
-            hover:bg-[#038347]
-            hover:shadow-[0_0_40px_rgba(3,131,71,0.45)]
+            duration-1000
+            group-hover:left-[140%]
           "
-        >
+        />
+      </div>
 
-          {/* Animated Shine */}
-          <div
-            className="
-              absolute
-              inset-0
-              opacity-0
-              transition-all
-              duration-700
-              group-hover:opacity-100
-            "
-          >
-            <div
-              className="
-                absolute
-                top-0
-                left-[-120%]
-                h-full
-                w-[60%]
-                rotate-12
-                bg-white/20
-                blur-xl
-                transition-all
-                duration-1000
-                group-hover:left-[140%]
-              "
-            />
-          </div>
-
-          <span className="relative z-10">
-            {children}
-          </span>
-        </button>
-      </Link>
-    </div>
+      <span className="relative z-10">
+        {children}
+      </span>
+    </Link>
   );
 }

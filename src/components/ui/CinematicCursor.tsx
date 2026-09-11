@@ -15,6 +15,7 @@ export default function CinematicCursor() {
 
     let currentX = 0;
     let currentY = 0;
+    let animationFrameId = 0;
 
     const moveCursor = (e: MouseEvent) => {
       mouseX = e.clientX;
@@ -31,31 +32,34 @@ export default function CinematicCursor() {
         translate3d(${currentX}px, ${currentY}px, 0)
       `;
 
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
     };
 
     animate();
 
-    // HOVER EFFECTS
-    const hoverElements = document.querySelectorAll(
-      "button, a"
-    );
-
-    hoverElements.forEach((el) => {
-      el.addEventListener("mouseenter", () => {
+    const handlePointerOver = (e: MouseEvent) => {
+      if (e.target instanceof Element && e.target.closest("button, a")) {
         cursor.classList.add("cursor-grow");
-      });
+      }
+    };
 
-      el.addEventListener("mouseleave", () => {
+    const handlePointerOut = (e: MouseEvent) => {
+      if (e.target instanceof Element && e.target.closest("button, a")) {
         cursor.classList.remove("cursor-grow");
-      });
-    });
+      }
+    };
+
+    document.addEventListener("mouseover", handlePointerOver);
+    document.addEventListener("mouseout", handlePointerOut);
 
     return () => {
+      cancelAnimationFrame(animationFrameId);
       window.removeEventListener(
         "mousemove",
         moveCursor
       );
+      document.removeEventListener("mouseover", handlePointerOver);
+      document.removeEventListener("mouseout", handlePointerOut);
     };
   }, []);
 
@@ -63,6 +67,7 @@ export default function CinematicCursor() {
     <div
       ref={cursorRef}
       className="
+        cinematic-cursor-wrap
         fixed
         top-0
         left-0

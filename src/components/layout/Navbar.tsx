@@ -17,7 +17,7 @@ export default function Navbar() {
               alt="State Logo"
               fill
               sizes="52px"
-              priority
+              loading="eager"
               className="object-contain"
             />
           </div>
@@ -36,17 +36,17 @@ export default function Navbar() {
 
         {/* NAVIGATION */}
         <nav className="hidden md:flex items-center gap-10 text-[13px] uppercase tracking-[0.18em] text-slate-600">
-          <a href="#" className="hover:text-[#0B6B3A] transition">
+          <Link href="/" className="hover:text-[#0B6B3A] transition">
             Home
-          </a>
+          </Link>
 
-          <a href="projects" className="hover:text-[#0B6B3A] transition">
+          <Link href="/projects" className="hover:text-[#0B6B3A] transition">
             Explore Projects
-          </a>
+          </Link>
 
-          <a href="#" className="hover:text-[#0B6B3A] transition">
-            Contact
-          </a>
+          <Link href="/governor-biography" className="hover:text-[#0B6B3A] transition">
+            Biography
+          </Link>
         </nav>
 
       <Link

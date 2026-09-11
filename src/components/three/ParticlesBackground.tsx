@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { rangedRandom } from "@/lib/seededRandom";
 
 type Particle = {
   left: number;
@@ -11,21 +11,15 @@ type Particle = {
   delay: number;
 };
 
+const particles: Particle[] = Array.from({ length: 28 }, (_, index) => ({
+  left: rangedRandom(index + 151, 0, 100),
+  top: rangedRandom(index + 163, 0, 100),
+  size: rangedRandom(index + 181, 1, 4),
+  duration: rangedRandom(index + 191, 8, 15),
+  delay: rangedRandom(index + 211, 0, 6),
+}));
+
 export default function ParticlesBackground() {
-  const [particles, setParticles] = useState<Particle[]>([]);
-
-  useEffect(() => {
-    setParticles(
-      Array.from({ length: 28 }).map(() => ({
-        left: Math.random() * 100,
-        top: Math.random() * 100,
-        size: Math.random() * 3 + 1,
-        duration: Math.random() * 7 + 8,
-        delay: Math.random() * 6,
-      }))
-    );
-  }, []);
-
   return (
     <div className="absolute inset-0 z-[1] overflow-hidden pointer-events-none">
       {particles.map((particle, index) => (

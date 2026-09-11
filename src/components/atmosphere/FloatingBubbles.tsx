@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { rangedRandom } from "@/lib/seededRandom";
 
 type Bubble = {
   size: number;
@@ -9,36 +9,26 @@ type Bubble = {
   delay: number;
 };
 
+const bubbles: Bubble[] = Array.from({ length: 14 }, (_, index) => ({
+  size: rangedRandom(index + 101, 36, 116),
+  left: rangedRandom(index + 113, 0, 100),
+  duration: rangedRandom(index + 127, 15, 35),
+  delay: rangedRandom(index + 131, 0, 10),
+}));
+
 export default function FloatingBubbles() {
-  const [bubbles, setBubbles] = useState<Bubble[]>([]);
-
-  useEffect(() => {
-    const generatedBubbles = Array.from({ length: 14 }).map(() => ({
-      size: Math.random() * 80 + 36,
-      left: Math.random() * 100,
-      duration: Math.random() * 20 + 15,
-      delay: Math.random() * 10,
-    }));
-
-    setBubbles(generatedBubbles);
-  }, []);
-
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-50">
       {bubbles.map((bubble, index) => (
         <div
           key={index}
-          className="absolute rounded-full bubble"
+          className="absolute bottom-[-200px] rounded-full bubble floating-bubble"
           style={{
             width: `${bubble.size}px`,
             height: `${bubble.size}px`,
             left: `${bubble.left}%`,
-            bottom: `-200px`,
             animationDuration: `${bubble.duration}s`,
             animationDelay: `${bubble.delay}s`,
-            background:
-              "radial-gradient(circle at center, rgba(3,131,71,0.18), rgba(255,255,255,0.02))",
-            border: "1px solid rgba(255,255,255,0.08)",
           }}
         />
       ))}
