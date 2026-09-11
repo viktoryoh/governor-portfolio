@@ -169,6 +169,8 @@ export default function InfrastructurePage() {
     </div>
   </Link>
 
+</div>
+
 {/* FLOATING IMAGE */}
 <motion.div
   initial={{
@@ -192,16 +194,16 @@ export default function InfrastructurePage() {
   className="
     fixed
     right-0
-    -bottom-6
-    z-[500]
+    bottom-0
+    z-[1400]
     pointer-events-none
   "
 >
   <div
     className="
       absolute
-      bottom-10
-      right-10
+      bottom-4
+      right-0
       w-[260px]
       h-[260px]
       rounded-full
@@ -224,10 +226,10 @@ export default function InfrastructurePage() {
       lg:h-[680px]
 
       opacity-90
-      translate-x-[18%]
-      sm:translate-x-[22%]
-      md:translate-x-[28%]
-      lg:translate-x-[32%]
+      translate-x-[24%]
+      sm:translate-x-[30%]
+      md:translate-x-[36%]
+      lg:translate-x-[40%]
     "
   >
     <Image
@@ -244,9 +246,6 @@ export default function InfrastructurePage() {
     />
   </div>
 </motion.div>
-  
-
-</div>
 
       {/* IMAGE */}
       <motion.div
