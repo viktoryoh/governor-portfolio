@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, ChevronRight, ShieldCheck } from "lucide-react";
+import { ArrowUpRight, ChevronRight } from "lucide-react";
 
 const footerGroups = [
   {
@@ -184,11 +184,6 @@ export default function Footer() {
                 Citizens
               </p>
             </div>
-          </div>
-
-          <div className="flex items-center gap-2 pb-4 text-xs font-semibold uppercase tracking-[0.18em] text-white/70 md:absolute md:bottom-8 md:right-16">
-            <ShieldCheck size={15} className="text-[#e67817]" />
-            <span>Continuity. Service. Development.</span>
           </div>
 
           <h2
