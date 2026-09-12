@@ -193,14 +193,9 @@ export default function Footer() {
 
           <h2
             aria-label="GOV. UMO ENO"
-            className="pointer-events-none select-none text-[58px] font-black uppercase leading-[0.72] tracking-normal text-white/90 drop-shadow-[0_28px_90px_rgba(6,20,13,0.35)] sm:text-[90px] md:text-[124px] lg:text-[168px] xl:text-[220px] 2xl:text-[250px]"
+            className="pointer-events-none select-none whitespace-nowrap text-[36px] font-black uppercase leading-none tracking-normal text-white/90 drop-shadow-[0_28px_90px_rgba(6,20,13,0.35)] sm:text-[64px] md:text-[92px] lg:text-[124px] xl:text-[156px] 2xl:text-[184px]"
           >
-            <span className="block whitespace-nowrap">
-              GOV. UMO
-            </span>
-            <span className="block whitespace-nowrap md:-mt-[0.08em]">
-              ENO
-            </span>
+            GOV. UMO ENO
           </h2>
         </div>
       </div>
