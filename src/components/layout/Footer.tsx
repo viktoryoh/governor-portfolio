@@ -163,24 +163,24 @@ export default function Footer() {
         </div>
 
         <div className="mt-auto">
-          <div className="mb-8 grid gap-4 border-y border-[#07150f]/10 py-5 text-[#07150f] sm:grid-cols-3 md:max-w-[680px]">
+          <div className="mb-8 grid gap-4 border-y border-white/25 bg-[#06140d]/20 px-4 py-5 text-white backdrop-blur-[2px] sm:grid-cols-3 md:max-w-[680px]">
             <div>
-              <p className="text-3xl font-black tracking-normal">500KM+</p>
-              <p className="mt-1 text-[10px] uppercase tracking-[0.22em] text-[#07150f]/50">
+              <p className="text-3xl font-black tracking-normal [text-shadow:0_3px_20px_rgba(0,0,0,0.65)]">500KM+</p>
+              <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/75 [text-shadow:0_2px_12px_rgba(0,0,0,0.65)]">
                 Roads
               </p>
             </div>
 
             <div>
-              <p className="text-3xl font-black tracking-normal">120K+</p>
-              <p className="mt-1 text-[10px] uppercase tracking-[0.22em] text-[#07150f]/50">
+              <p className="text-3xl font-black tracking-normal [text-shadow:0_3px_20px_rgba(0,0,0,0.65)]">120K+</p>
+              <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/75 [text-shadow:0_2px_12px_rgba(0,0,0,0.65)]">
                 Jobs
               </p>
             </div>
 
             <div>
-              <p className="text-3xl font-black tracking-normal">1.2M</p>
-              <p className="mt-1 text-[10px] uppercase tracking-[0.22em] text-[#07150f]/50">
+              <p className="text-3xl font-black tracking-normal [text-shadow:0_3px_20px_rgba(0,0,0,0.65)]">1.2M</p>
+              <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/75 [text-shadow:0_2px_12px_rgba(0,0,0,0.65)]">
                 Citizens
               </p>
             </div>

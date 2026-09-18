@@ -13,6 +13,10 @@ gsap.registerPlugin(ScrollTrigger);
 const word = "TRANSPORTATION";
 
 const transportImages = [
+  "/images/projects/public-transit-fleet.jpg",
+  "/images/projects/accessible-passenger-mobility.jpg",
+  "/images/projects/community-bridge-project.jpg",
+  "/images/projects/urban-road-expansion.jpg",
   "/images/projects/infra4.jpg",
   "/images/projects/infra3.jpg",
   "/images/projects/infra2.jpg",
@@ -27,6 +31,10 @@ const transportImages = [
 ];
 
 const imageTitles = [
+  "Expanded Public Transit Fleet",
+  "Modern, Accessible Passenger Mobility",
+  "Bridge Infrastructure Connecting Communities",
+  "Urban Road Expansion for Safer Journeys",
   "Modern Highway Systems",
   "Modern Aircraft",
   "State-of-the-Art Aircraft",

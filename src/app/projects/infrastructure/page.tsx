@@ -12,7 +12,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 const word = "INFRASTRUCTURE";
 const infrastructureImages = [
-  "/images/projects/infra1.jpg",
+  "/images/projects/cng-project.jpg",
+  "/images/projects/cng-storage-infrastructure.jpg",
   "/images/projects/hospital.jpg",
   "/images/projects/road2.jpg",
   "/images/projects/iot.webp",
@@ -30,7 +31,8 @@ const infrastructureImages = [
   "/images/projects/umo20.jpg"
 ];
 const imageTitles = [
-  "Modern Cathedral Infrastructure",
+  "CNG Project",
+  "CNG Storage and Distribution Infrastructure",
   "Modern Healthcare Facilities",
   "Modern FlyOver Projects",
   "Urban Smart City Development",
