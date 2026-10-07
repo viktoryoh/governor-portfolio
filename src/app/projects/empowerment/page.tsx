@@ -40,11 +40,19 @@ const imageTitles = [
   "Youth Empowerment",
 ];
 
+const faceSafeImagePositions: Record<string, string> = {
+  "/images/projects/youth1.jpg": "25% top",
+  "/images/projects/41.jpg": "13% top",
+  "/images/projects/37.jpg": "24% top",
+};
+
 export default function EmpowermentPage() {
 
   const [showGallery, setShowGallery] = useState(false);
 
   const [currentImage, setCurrentImage] = useState(0);
+
+  const currentImagePosition = faceSafeImagePositions[youthImages[currentImage]];
 
   const sectionRef = useRef<HTMLDivElement>(null);
 
@@ -744,7 +752,7 @@ export default function EmpowermentPage() {
   <motion.div
     initial={{
       opacity: 0,
-      scale: 1.1,
+      scale: 1,
     }}
     animate={{
       opacity: 1,
@@ -769,7 +777,7 @@ export default function EmpowermentPage() {
     <motion.div
       key={currentImage}
       initial={{
-        scale: 1.2,
+        scale: currentImagePosition ? 1 : 1.2,
         opacity: 0,
       }}
       animate={{
@@ -788,9 +796,9 @@ export default function EmpowermentPage() {
         alt="Empowerment Programs"
         fill
         sizes="100vw"
+        style={{ objectPosition: currentImagePosition ?? "center" }}
         className="
           object-cover
-          object-center
           brightness-[1.15]
           contrast-[1.08]
           saturate-[1.1]
@@ -816,9 +824,12 @@ export default function EmpowermentPage() {
         }}
         className="
           absolute
-          bottom-20
-          left-10
+          bottom-36
+          md:bottom-20
+          left-6
+          right-6
           md:left-20
+          md:right-auto
           z-20
           max-w-[700px]
         "
@@ -830,7 +841,8 @@ export default function EmpowermentPage() {
             uppercase
             tracking-[0.35em]
             text-[#e67817]
-            text-xs
+            text-[10px]
+            sm:text-xs
           "
         >
           Empowerment Programs
@@ -839,10 +851,12 @@ export default function EmpowermentPage() {
         <h2
           className="
             text-white
-            text-[12vw]
-            md:text-[5vw]
+            text-[32px]
+            sm:text-[48px]
+            md:text-[64px]
+            lg:text-[80px]
             font-black
-            tracking-[-0.06em]
+            tracking-normal
             leading-[0.9]
           "
         >
@@ -868,6 +882,7 @@ export default function EmpowermentPage() {
 
       {/* PREV */}
       <button
+        aria-label="Previous image"
         onClick={() =>
           setCurrentImage((prev) =>
             prev === 0
@@ -896,6 +911,7 @@ export default function EmpowermentPage() {
 
       {/* NEXT */}
       <button
+        aria-label="Next image"
         onClick={() =>
           setCurrentImage((prev) =>
             prev === youthImages.length - 1

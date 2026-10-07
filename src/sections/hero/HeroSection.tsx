@@ -2,18 +2,22 @@
 
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import FloatingBubbles from "@/components/atmosphere/FloatingBubbles";
 import MagneticButton from "@/components/ui/MagneticButton";
 import CinematicShader from "@/components/webgl/CinematicShader";
 import LightSweep from "@/components/atmosphere/LightSweep";
-gsap.registerPlugin(ScrollTrigger);
 
 const heroImages = [
   "/images/governor-1.png",
   "/images/governor-2.jpg",
   "/images/governor-3.jpg",
+];
+
+const heroScenes = [
+  { id: "progress", lines: ["Progress"] },
+  { id: "continue", lines: ["Continue"] },
+  { id: "result", lines: ["Result", "That Speaks Clearly"] },
 ];
 
 export default function HeroSection() {
@@ -25,9 +29,6 @@ const textLayerRef = useRef<HTMLDivElement>(null);
 const buttonLayerRef = useRef<HTMLDivElement>(null);
 const atmosphereLayerRef = useRef<HTMLDivElement>(null);
 
-  const progressRef = useRef<HTMLHeadingElement>(null);
-  const continuesRef = useRef<HTMLHeadingElement>(null);
-  const resultsRef = useRef<HTMLHeadingElement>(null);
   
 const [currentImage, setCurrentImage] = useState(0);
 
@@ -40,119 +41,41 @@ useEffect(() => {
 }, []);
 
 useEffect(() => {
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const ctx = gsap.context(() => {
+    const scenes = gsap.utils.toArray<HTMLElement>(".hero-scene");
 
-    const tl = gsap.timeline({
-   scrollTrigger: {
-  trigger: sectionRef.current,
-  start: "top top",
-  end: "+=5000",
-  scrub: 1,
-  pin: true,
-  pinSpacing: true,
-  anticipatePin: 1,
-  invalidateOnRefresh: true,
-},
+    if (reducedMotion) {
+      const finalScene = scenes[scenes.length - 1];
+      gsap.set(finalScene, { autoAlpha: 1 });
+      gsap.set(finalScene.querySelectorAll(".hero-letter"), { autoAlpha: 1 });
+      return;
+    }
+
+    const timeline = gsap.timeline({ repeat: -1, repeatDelay: 0.4, delay: 0.25 });
+
+    // Hidden letters reserve the final phrase's width throughout typing.
+    scenes.forEach((scene) => {
+      const letters = scene.querySelectorAll(".hero-letter");
+
+      timeline
+        .fromTo(scene, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.15 })
+        .fromTo(
+          letters,
+          { autoAlpha: 0 },
+          { autoAlpha: 1, duration: 0.06, stagger: 0.14, ease: "none" }
+        )
+        .to(scene, { autoAlpha: 0, duration: 0.75, ease: "power2.inOut" }, ">2")
+        .set(letters, { autoAlpha: 0 })
+        .to({}, { duration: 0.25 });
     });
-
-
-
-    // INITIAL STATES
-    gsap.set(continuesRef.current, {
-      opacity: 0,
-      y: 80,
-    });
-
-    gsap.set(resultsRef.current, {
-      opacity: 0,
-      y: 80,
-    });
-
-    // SCENE 1 — PROGRESS
-    tl.fromTo(
-      progressRef.current,
-      {
-        opacity: 0,
-        y: 100,
-        scale: 1.2,
-      },
-      {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 2.5,
-        ease: "power3.out"
-      }
-    );
-
-    // FADE OUT PROGRESS
-    tl.to(
-  progressRef.current,
-  {
-    opacity: 0,
-    x: -300,
-    filter: "blur(10px)",
-    duration: 2,
-    ease: "power3.inOut",
-  },
-  ">1.2"
-);
-
-    // SCENE 2 — CONTINUES
-    tl.to(
-      continuesRef.current,
-      {
-        opacity: 1,
-        y: 0,
-        duration: 2.5,
-        ease: "power3.out"
-      },
-      ">0.3"
-    );
-
-    // FADE OUT CONTINUES
-    tl.to(
-  continuesRef.current,
-  {
-    opacity: 0,
-    x: 300,
-    filter: "blur(10px)",
-    duration: 2,
-    ease: "power3.inOut",
-  },
-  ">1.2"
-);
-
-    // SCENE 3 — RESULTS
-    tl.to(
-      resultsRef.current,
-      {
-        opacity: 1,
-        y: 0,
-        duration: 2.5,
-        ease: "power3.out"
-      },
-      ">0.3"
-    );
-
-    // FADE OUT RESULTS
-    tl.to(
-      resultsRef.current,
-      {
-        opacity: 0,
-        y: -120,
-        duration: 2.5,
-        ease: "power3.out"
-      },
-      ">1.2"
-    );
-
   }, sectionRef);
 
 
   // DISTORTION RIPPLE EFFECT
 
 const handleMouseMove = (e: MouseEvent) => {
+  if (reducedMotion) return;
 
   const x =
     (e.clientX / window.innerWidth - 0.5) * 40;
@@ -163,10 +86,8 @@ const handleMouseMove = (e: MouseEvent) => {
   // IMAGE LAYER
   if (imageWrapperRef.current) {
     gsap.to(imageWrapperRef.current, {
-      x: x * 0.35,
-      y: y * 0.35,
-      rotationY: x * 0.08,
-      rotationX: -y * 0.08,
+      x: Math.round(x * 0.15),
+      y: Math.round(y * 0.15),
       duration: 1.8,
       ease: "power3.out",
     });
@@ -192,16 +113,6 @@ const handleMouseMove = (e: MouseEvent) => {
     });
   }
 
-  // TEXT
-  if (textLayerRef.current) {
-    gsap.to(textLayerRef.current, {
-      x: x * 0.12,
-      y: y * 0.12,
-      duration: 1.6,
-      ease: "power3.out",
-    });
-  }
-
   // BUTTON
   if (buttonLayerRef.current) {
     gsap.to(buttonLayerRef.current, {
@@ -223,7 +134,6 @@ window.addEventListener(
   "mousemove",
   handleMouseMove
 );
-  ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
   ctx.revert();
 };
 }, []);
@@ -233,15 +143,18 @@ window.addEventListener(
       ref={sectionRef}
       className="
         relative
+        isolate
         h-screen
         overflow-hidden
         bg-[#e67817]
       "
     >
-        <CinematicShader />
+        <div className="absolute inset-0 z-[2] pointer-events-none opacity-25">
+          <CinematicShader />
+        </div>
         <div
   ref={atmosphereLayerRef}
-  className="absolute inset-0 z-[15]"
+  className="absolute inset-0 z-[15] opacity-30"
 >
   <LightSweep />
 </div>
@@ -250,7 +163,7 @@ window.addEventListener(
   ref={imageWrapperRef}
   className="
     absolute
-    inset-0
+    -inset-2
     overflow-hidden
   "
 >
@@ -260,16 +173,16 @@ window.addEventListener(
       src={image}
       alt="Governor"
       fill
-      sizes="100vw"
+      sizes="(max-aspect-ratio: 3/2) 150vh, 100vw"
+      quality={95}
       loading={index === 0 ? "eager" : "lazy"}
+      fetchPriority={index === 0 ? "high" : "auto"}
       className={`
+        hero-photo
         object-cover
         object-center
-        scale-100
-        brightness-110
-        contrast-110
         transition-opacity
-        duration-[2500ms]
+        duration-[800ms]
         ease-in-out
         absolute
         inset-0
@@ -304,116 +217,39 @@ window.addEventListener(
       -translate-x-1/2
       -translate-y-1/2
       rounded-full
-      bg-[#038347]/20
+      bg-[#038347]/5
       blur-[140px]
     "
   />
 </div>
 
 
-      {/* DARK OVERLAY */}
-      <div className="absolute inset-0 bg-black/15" />
-
-      {/* GREEN ATMOSPHERIC GRADIENT */}
-      <div
-        className="
-          absolute
-          inset-0
-          bg-[radial-gradient(circle_at_center,rgba(11,107,58,0.10)_0%,rgba(0,0,0,0.35)_100%)]
-        "
-      />
+      <div className="hero-readability-overlay absolute inset-0 pointer-events-none" />
 
       <div
   ref={textLayerRef}
-  className="absolute inset-0 z-[60]"
-></div>
-
-      {/* PROGRESS */}
-      <div
-        className="
-          absolute
-          inset-0
-          flex
-          items-center
-          justify-center
-          z-[60]
-          pointer-events-none
-        "
-      >
-        <h1
-          ref={progressRef}
-          className="
-            text-white
-            text-[10vw]
-            font-black
-            uppercase
-            tracking-[-0.08em]
-            leading-none
-            text-center
-          "
-        >
-          Progress
-        </h1>
-      </div>
-
-      {/* CONTINUES */}
-      <div
-        className="
-          absolute
-          inset-0
-          flex
-          items-center
-          justify-center
-          z-[60]
-          pointer-events-none
-        "
-      >
-        <h1
-          ref={continuesRef}
-          className="
-            text-[#e67817]
-            text-[10vw]
-            font-black
-            uppercase
-            tracking-[-0.08em]
-            leading-none
-            text-center
-            translate-y-[140px]
-          "
-        >
-          Continues
-        </h1>
-      </div>
-
-      {/* RESULTS */}
-      <div
-        className="
-          absolute
-          inset-0
-          flex
-          items-center
-          justify-center
-          z-[60]
-          pointer-events-none
-          px-6
-        "
-      >
-        <h1
-          ref={resultsRef}
-          className="
-            text-white
-            text-center
-            text-[9vw]
-            md:text-[6vw]
-            font-black
-            uppercase
-            tracking-[-0.08em]
-            leading-[0.9]
-          "
-        >
-          Results
-          <br />
-          That Speak Clearly
+  className="absolute inset-0 z-[60] flex items-center justify-center pointer-events-none"
+>
+        <h1 className="hero-headline">
+          <span className="sr-only">Progress. Continue. Result That Speaks Clearly.</span>
+          {heroScenes.map((scene) => (
+            <span key={scene.id} className={`hero-scene hero-scene--${scene.id}`} aria-hidden="true">
+              {scene.lines.map((line) => (
+                <span key={line} className="hero-line">
+                  {line.split(" ").map((word, wordIndex) => (
+                    <span key={`${word}-${wordIndex}`}>
+                      {wordIndex > 0 && <span className="hero-letter"> </span>}
+                      <span className="hero-word">
+                        {Array.from(word).map((letter, letterIndex) => (
+                          <span key={letterIndex} className="hero-letter">{letter}</span>
+                        ))}
+                      </span>
+                    </span>
+                  ))}
+                </span>
+              ))}
+            </span>
+          ))}
         </h1>
       </div>
         
