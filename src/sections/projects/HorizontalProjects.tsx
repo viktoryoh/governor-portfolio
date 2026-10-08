@@ -23,13 +23,19 @@ export default function HorizontalProjects() {
     const track = trackRef.current;
     if (!section || !track) return;
     const media = gsap.matchMedia();
-    media.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () => {
+    media.add({
+      motion: "(prefers-reduced-motion: no-preference)",
+      desktop: "(min-width: 1024px)",
+    }, (context) => {
+      if (!context.conditions?.motion) return;
+      const desktop = context.conditions.desktop;
       const panels = gsap.utils.toArray<HTMLElement>(".project-panel");
       gsap.to(panels, {
         xPercent: -100 * (panels.length - 1),
         ease: "none",
         scrollTrigger: {
           trigger: section,
+          start: desktop ? "top top" : "top 80px",
           pin: true,
           scrub: 1,
           snap: 1 / (panels.length - 1),
@@ -37,6 +43,8 @@ export default function HorizontalProjects() {
           invalidateOnRefresh: true,
         },
       });
+
+      if (!desktop) return;
 
       gsap.utils.toArray<HTMLElement>(".project-background-title").forEach((text) => {
         gsap.to(text, {
@@ -80,10 +88,10 @@ export default function HorizontalProjects() {
               <div className="project-picture group">
                 <Image src={project.image} alt={project.title} fill sizes="(max-width: 1023px) 100vw, 50vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
               </div>
-              <div className="min-w-0">
+              <div className="project-copy min-w-0">
                 <p className="mb-5 text-[11px] uppercase text-[#0B6B3A]">Signature Project</p>
                 <h2 id={`project-title-${index}`} className="project-title mb-8 text-slate-900">{project.title}</h2>
-                <p className="mb-10 max-w-[520px] text-[18px] leading-[1.9] text-slate-700">
+                <p className="project-description mb-10 max-w-[520px] text-[18px] leading-[1.9] text-slate-700">
                   Strategic investments delivering sustainable infrastructure,
                   innovation, transportation, and long-term economic growth
                   across the state.
