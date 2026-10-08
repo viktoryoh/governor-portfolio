@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -43,6 +43,7 @@ const imageTitles = [
 ];
 
 export default function DigitalEconomyPage() {
+  const reducedMotion = useReducedMotion();
 
   const [showGallery, setShowGallery] = useState(false);
 
@@ -57,6 +58,7 @@ export default function DigitalEconomyPage() {
 
   useEffect(() => {
 
+    if (reducedMotion || !window.matchMedia("(pointer: fine)").matches) return;
     const handleMouseMove = (e: MouseEvent) => {
 
       setMousePosition({
@@ -72,14 +74,15 @@ export default function DigitalEconomyPage() {
       window.removeEventListener("mousemove", handleMouseMove);
     };
 
-  }, []);
+  }, [reducedMotion]);
 
   useEffect(() => {
 
-    if (!showGallery) return;
+    if (!showGallery || reducedMotion) return;
 
     const interval = setInterval(() => {
 
+      if (document.hidden) return;
       setCurrentImage((prev) =>
         prev === digitalImages.length - 1
           ? 0
@@ -90,7 +93,7 @@ export default function DigitalEconomyPage() {
 
     return () => clearInterval(interval);
 
-  }, [showGallery]);
+  }, [showGallery, reducedMotion]);
 
   useEffect(() => {
 
@@ -109,7 +112,6 @@ export default function DigitalEconomyPage() {
     }, sectionRef);
 
     return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
       ctx.revert();
     };
 

@@ -7,6 +7,7 @@ import { motion, useMotionValue, useTransform } from "framer-motion";
 import CinematicParticles from "@/components/CinematicParticles";
 import { useRef, useState, type MouseEvent } from "react";
 import { rangedRandom } from "@/lib/seededRandom";
+import { useAmbientMotion } from "@/lib/useAmbientMotion";
 
 type Particle = {
   left: number;
@@ -25,6 +26,7 @@ const particles: Particle[] = Array.from({ length: 25 }, (_, index) => ({
 }));
 
 export default function GovernorBiographyPage() {
+  const { ref: ambientRef, enabled: ambientEnabled } = useAmbientMotion<HTMLElement>();
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -54,6 +56,7 @@ const toggleAudio = async () => {
 };
 
 const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+  if (!ambientEnabled || !window.matchMedia("(pointer: fine)").matches) return;
   const rect = e.currentTarget.getBoundingClientRect();
 
   mouseX.set(e.clientX - rect.left - rect.width / 2);
@@ -66,7 +69,7 @@ const handleMouseLeave = () => {
 };
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-black">
+    <main ref={ambientRef} className="relative min-h-screen overflow-hidden bg-black">
 
       {/* BACKGROUND IMAGE */}
       <div className="absolute inset-0">
@@ -97,7 +100,7 @@ const handleMouseLeave = () => {
 
   transition={{
     duration: 20,
-    repeat: Infinity,
+    repeat: ambientEnabled ? Infinity : 0,
     ease: "linear",
   }}
 
@@ -122,7 +125,7 @@ const handleMouseLeave = () => {
 
   transition={{
     duration: 10,
-    repeat: Infinity,
+    repeat: ambientEnabled ? Infinity : 0,
     ease: "easeInOut",
   }}
 
@@ -170,7 +173,7 @@ const handleMouseLeave = () => {
 {/* GOLD DUST */}
 <div className="absolute inset-0 z-[3] overflow-hidden pointer-events-none">
 
-  {particles.map((particle, i) => (
+  {ambientEnabled && particles.map((particle, i) => (
 
     <motion.div
       key={i}
@@ -183,7 +186,7 @@ const handleMouseLeave = () => {
 
       transition={{
         duration: particle.duration,
-        repeat: Infinity,
+        repeat: ambientEnabled ? Infinity : 0,
         delay: particle.delay,
         ease: "linear",
       }}
@@ -302,7 +305,7 @@ const handleMouseLeave = () => {
 
   transition={{
     duration: 2,
-    repeat: Infinity,
+    repeat: ambientEnabled ? Infinity : 0,
   }}
 
   className="
@@ -376,7 +379,7 @@ transition={{
     duration: 1.4,
     y: {
       duration: 6,
-      repeat: Infinity,
+      repeat: ambientEnabled ? Infinity : 0,
       ease: "easeInOut",
     },
   }}
@@ -449,7 +452,7 @@ transition={{
 
   transition={{
     duration: 8,
-    repeat: Infinity,
+    repeat: ambientEnabled ? Infinity : 0,
     ease: "easeInOut",
   }}
 
@@ -471,7 +474,7 @@ transition={{
   }}
   transition={{
     duration: 5,
-    repeat: Infinity,
+    repeat: ambientEnabled ? Infinity : 0,
     ease: "linear",
   }}
   className="
@@ -597,7 +600,7 @@ transition={{
   }}
   transition={{
     duration: 0.8,
-    repeat: Infinity,
+    repeat: ambientEnabled ? Infinity : 0,
   }}
   className="text-[#e67817]"
 >

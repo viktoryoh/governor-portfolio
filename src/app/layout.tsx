@@ -1,5 +1,7 @@
 import "./globals.css";
 import Footer from "@/components/layout/Footer";
+import FooterVisibility from "@/components/layout/FooterVisibility";
+import MotionPreferences from "@/components/layout/MotionPreferences";
 
 export const metadata = {
   title: "Governor Portfolio",
@@ -14,8 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
-        <Footer />
+        <MotionPreferences>
+          {children}
+          <FooterVisibility><Footer /></FooterVisibility>
+        </MotionPreferences>
       </body>
     </html>
   );

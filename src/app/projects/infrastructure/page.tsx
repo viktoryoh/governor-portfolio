@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -50,6 +50,7 @@ const imageTitles = [
   "Paint Industry and Job Creation"
 ];
 export default function InfrastructurePage() {
+  const reducedMotion = useReducedMotion();
 
   const [showGallery, setShowGallery] = useState(false);
 
@@ -63,6 +64,7 @@ export default function InfrastructurePage() {
   });
 
   useEffect(() => {
+    if (reducedMotion || !window.matchMedia("(pointer: fine)").matches) return;
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({
         x: (e.clientX / window.innerWidth - 0.5) * 40,
@@ -75,15 +77,16 @@ export default function InfrastructurePage() {
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, []);
+  }, [reducedMotion]);
 
   useEffect(() => {
 
-  if (!showGallery) return;
+  if (!showGallery || reducedMotion) return;
 
   const interval = setInterval(() => {
 
-    setCurrentImage((prev) =>
+    if (document.hidden) return;
+      setCurrentImage((prev) =>
       prev === infrastructureImages.length - 1
         ? 0
         : prev + 1
@@ -93,7 +96,7 @@ export default function InfrastructurePage() {
 
   return () => clearInterval(interval);
 
-}, [showGallery]);
+}, [showGallery, reducedMotion]);
 
   useEffect(() => {
 
@@ -114,7 +117,6 @@ export default function InfrastructurePage() {
     }, sectionRef);
 
     return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
       ctx.revert();
     };
 

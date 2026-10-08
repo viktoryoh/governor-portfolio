@@ -1,19 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import Image from "next/image";
-import FloatingBubbles from "@/components/atmosphere/FloatingBubbles";
+import { ArrowDown } from "lucide-react";
 import MagneticButton from "@/components/ui/MagneticButton";
-import CinematicShader from "@/components/webgl/CinematicShader";
-import LightSweep from "@/components/atmosphere/LightSweep";
 
-const heroImages = [
-  "/images/governor-1.png",
-  "/images/governor-2.jpg",
-  "/images/governor-3.jpg",
-];
-
+const heroImages = ["/images/governor-1.png", "/images/governor-2.jpg", "/images/governor-3.jpg"];
 const heroScenes = [
   { id: "progress", lines: ["Progress"] },
   { id: "continue", lines: ["Continue"] },
@@ -21,228 +14,67 @@ const heroScenes = [
 ];
 
 export default function HeroSection() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const imageWrapperRef = useRef<HTMLDivElement>(null);
-  const glowRef = useRef<HTMLDivElement>(null);
-
-const textLayerRef = useRef<HTMLDivElement>(null);
-const buttonLayerRef = useRef<HTMLDivElement>(null);
-const atmosphereLayerRef = useRef<HTMLDivElement>(null);
-
-  
-const [currentImage, setCurrentImage] = useState(0);
-
-useEffect(() => {
-  const interval = setInterval(() => {
-    setCurrentImage((prev) => (prev + 1) % heroImages.length);
-  }, 5000);
-
-  return () => clearInterval(interval);
-}, []);
-
-useEffect(() => {
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const ctx = gsap.context(() => {
-    const scenes = gsap.utils.toArray<HTMLElement>(".hero-scene");
-
-    if (reducedMotion) {
-      const finalScene = scenes[scenes.length - 1];
-      gsap.set(finalScene, { autoAlpha: 1 });
-      gsap.set(finalScene.querySelectorAll(".hero-letter"), { autoAlpha: 1 });
-      return;
-    }
-
-    const timeline = gsap.timeline({ repeat: -1, repeatDelay: 0.4, delay: 0.25 });
-
-    // Hidden letters reserve the final phrase's width throughout typing.
-    scenes.forEach((scene) => {
-      const letters = scene.querySelectorAll(".hero-letter");
-
-      timeline
-        .fromTo(scene, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.15 })
-        .fromTo(
-          letters,
-          { autoAlpha: 0 },
-          { autoAlpha: 1, duration: 0.06, stagger: 0.14, ease: "none" }
-        )
-        .to(scene, { autoAlpha: 0, duration: 0.75, ease: "power2.inOut" }, ">2")
-        .set(letters, { autoAlpha: 0 })
-        .to({}, { duration: 0.25 });
-    });
-  }, sectionRef);
-
-
-  // DISTORTION RIPPLE EFFECT
-
-const handleMouseMove = (e: MouseEvent) => {
-  if (reducedMotion) return;
-
-  const x =
-    (e.clientX / window.innerWidth - 0.5) * 40;
-
-  const y =
-    (e.clientY / window.innerHeight - 0.5) * 40;
-
-  // IMAGE LAYER
-  if (imageWrapperRef.current) {
-    gsap.to(imageWrapperRef.current, {
-      x: Math.round(x * 0.15),
-      y: Math.round(y * 0.15),
-      duration: 1.8,
-      ease: "power3.out",
-    });
-  }
-
-  // ATMOSPHERE
-  if (atmosphereLayerRef.current) {
-    gsap.to(atmosphereLayerRef.current, {
-      x: x * 0.55,
-      y: y * 0.55,
-      duration: 2.4,
-      ease: "power3.out",
-    });
-  }
-
-  // GLOW
-  if (glowRef.current) {
-    gsap.to(glowRef.current, {
-      x: x * 0.75,
-      y: y * 0.75,
-      duration: 2.6,
-      ease: "power3.out",
-    });
-  }
-
-  // BUTTON
-  if (buttonLayerRef.current) {
-    gsap.to(buttonLayerRef.current, {
-      x: x * 0.18,
-      y: y * 0.18,
-      duration: 1.2,
-      ease: "power3.out",
-    });
-  }
-};
-
-window.addEventListener(
-  "mousemove",
-  handleMouseMove
-);
-
-  return () => {
-    window.removeEventListener(
-  "mousemove",
-  handleMouseMove
-);
-  ctx.revert();
-};
-}, []);
+  const sectionRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    const media = gsap.matchMedia();
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      const scenes = section.querySelectorAll<HTMLElement>(".hero-scene");
+      const photos = section.querySelectorAll(".hero-photo");
+      const timeline = gsap.timeline({ repeat: -1, repeatDelay: 0.4 });
+      gsap.set(scenes, { autoAlpha: 0 });
+      gsap.set(section.querySelectorAll(".hero-letter"), { autoAlpha: 0 });
+      // Photos, typing and pauses share one clock.
+      scenes.forEach((scene, index) => {
+        const letters = scene.querySelectorAll(".hero-letter");
+        timeline
+          .to(photos, { opacity: (i) => i === index ? 1 : 0, duration: 0.8 })
+          .set(scene, { autoAlpha: 1 })
+          .to(letters, { autoAlpha: 1, duration: 0.05, stagger: 0.09, ease: "none" })
+          .to(scene, { autoAlpha: 0, duration: 0.45 }, ">2.8")
+          .set(letters, { autoAlpha: 0 });
+      });
+      let visible = true;
+      const sync = () => { timeline.paused(!visible || document.hidden); };
+      const observer = new IntersectionObserver(([entry]) => {
+        visible = entry.isIntersecting;
+        sync();
+      }, { threshold: 0.1 });
+      observer.observe(section);
+      document.addEventListener("visibilitychange", sync);
+      sync();
+      return () => {
+        observer.disconnect();
+        document.removeEventListener("visibilitychange", sync);
+      };
+    }, section);
+    return () => media.revert();
+  }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="
-        relative
-        isolate
-        h-screen
-        overflow-hidden
-        bg-[#e67817]
-      "
-    >
-        <div className="absolute inset-0 z-[2] pointer-events-none opacity-25">
-          <CinematicShader />
-        </div>
-        <div
-  ref={atmosphereLayerRef}
-  className="absolute inset-0 z-[15] opacity-30"
->
-  <LightSweep />
-</div>
-      {/* GOVERNOR IMAGE */}
-     <div
-  ref={imageWrapperRef}
-  className="
-    absolute
-    -inset-2
-    overflow-hidden
-  "
->
-  {heroImages.map((image, index) => (
-    <Image
-      key={index}
-      src={image}
-      alt="Governor"
-      fill
-      sizes="(max-aspect-ratio: 3/2) 150vh, 100vw"
-      quality={95}
-      loading={index === 0 ? "eager" : "lazy"}
-      fetchPriority={index === 0 ? "high" : "auto"}
-      className={`
-        hero-photo
-        object-cover
-        object-center
-        transition-opacity
-        duration-[800ms]
-        ease-in-out
-        absolute
-        inset-0
-        ${
-          index === currentImage
-            ? "opacity-100"
-            : "opacity-0"
-        }
-      `}
-    />
-  ))}
-</div>
-      <FloatingBubbles />
-
-    {/* DISTORTION GLOW */}
-<div
-  ref={glowRef}
-  className="
-    absolute
-    inset-0
-    pointer-events-none
-    z-[5]
-  "
->
-  <div
-    className="
-      absolute
-      top-1/2
-      left-1/2
-      h-[700px]
-      w-[700px]
-      -translate-x-1/2
-      -translate-y-1/2
-      rounded-full
-      bg-[#038347]/5
-      blur-[140px]
-    "
-  />
-</div>
-
-
+    <section ref={sectionRef} className="hero-section relative isolate overflow-hidden bg-[#e67817]">
+      <div className="absolute inset-0" aria-hidden="true">
+        {heroImages.map((src, index) => (
+          <Image key={src} src={src} alt="" fill sizes="(max-aspect-ratio: 3/2) 150vh, 100vw" quality={95}
+            loading={index === 0 ? "eager" : "lazy"} fetchPriority={index === 0 ? "high" : "auto"}
+            className={`hero-photo object-cover ${index === 0 ? "opacity-100" : "opacity-0"}`} />
+        ))}
+      </div>
       <div className="hero-readability-overlay absolute inset-0 pointer-events-none" />
-
-      <div
-  ref={textLayerRef}
-  className="absolute inset-0 z-[60] flex items-center justify-center pointer-events-none"
->
-        <h1 className="hero-headline">
+      <div className="hero-content relative z-10 mx-auto flex h-full max-w-[1280px] flex-col justify-end px-5 pb-14 sm:px-8 lg:px-16">
+        <h1 className="mb-4 text-xl font-bold text-white sm:text-2xl">Governor Umo Eno</h1>
+        <div className="hero-headline">
           <span className="sr-only">Progress. Continue. Result That Speaks Clearly.</span>
           {heroScenes.map((scene) => (
             <span key={scene.id} className={`hero-scene hero-scene--${scene.id}`} aria-hidden="true">
               {scene.lines.map((line) => (
                 <span key={line} className="hero-line">
                   {line.split(" ").map((word, wordIndex) => (
-                    <span key={`${word}-${wordIndex}`}>
+                    <span key={word}>
                       {wordIndex > 0 && <span className="hero-letter"> </span>}
                       <span className="hero-word">
-                        {Array.from(word).map((letter, letterIndex) => (
-                          <span key={letterIndex} className="hero-letter">{letter}</span>
-                        ))}
+                        {Array.from(word).map((letter, i) => <span key={i} className="hero-letter">{letter}</span>)}
                       </span>
                     </span>
                   ))}
@@ -250,29 +82,15 @@ window.addEventListener(
               ))}
             </span>
           ))}
-        </h1>
+        </div>
+        <div className="mt-6 flex justify-center">
+          <MagneticButton href="/projects">Explore Projects</MagneticButton>
+        </div>
+        <a href="#impact" aria-label="View governance impact" title="View governance impact" className="absolute bottom-10 right-8 hidden h-12 w-12 items-center justify-center rounded-full border border-white/40 text-white transition-colors hover:bg-white/15 lg:flex">
+          <ArrowDown size={20} aria-hidden="true" />
+        </a>
       </div>
-        
-
-    
-
-{/* MAGNETIC BUTTON */}
-<div
-  ref={buttonLayerRef}
-  className="
-    absolute
-    bottom-14
-    left-1/2
-    -translate-x-1/2
-    z-[70]
-  "
->
-  <MagneticButton href="/projects">
-    Explore Projects
-  </MagneticButton>
-</div>
     </section>
-    
   );
 }
 

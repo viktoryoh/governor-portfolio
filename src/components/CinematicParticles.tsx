@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { rangedRandom } from "@/lib/seededRandom";
+import { useAmbientMotion } from "@/lib/useAmbientMotion";
 
 type Particle = {
   left: number;
@@ -24,9 +25,10 @@ const particles: Particle[] = Array.from({ length: 36 }, (_, index) => ({
 }));
 
 export default function CinematicParticles() {
+  const { ref, enabled } = useAmbientMotion();
   return (
-    <div className="absolute inset-0 z-[2] overflow-hidden pointer-events-none">
-      {particles.map((particle, index) => (
+    <div ref={ref} aria-hidden="true" className="absolute inset-0 z-[2] overflow-hidden pointer-events-none">
+      {enabled && particles.map((particle, index) => (
         <motion.span
           key={index}
           animate={{
