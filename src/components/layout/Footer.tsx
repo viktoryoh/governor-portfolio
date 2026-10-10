@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, ChevronRight } from "lucide-react";
+import MandateLink from "./MandateLink";
 
 const footerGroups = [
   {
@@ -83,7 +84,7 @@ export default function Footer() {
       <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(230,120,23,0.12)_0%,transparent_38%,rgba(3,131,71,0.16)_82%)]" />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#038347]/40 to-transparent" />
 
-      <div className="relative mx-auto flex min-h-[720px] max-w-[1440px] flex-col px-6 pb-0 pt-10 md:min-h-[780px] md:px-10 lg:px-16">
+      <div className="relative mx-auto flex min-h-[720px] max-w-[1440px] flex-col px-6 pb-24 pt-10 md:min-h-[780px] md:px-10 lg:px-16">
         <div className="grid gap-10 lg:grid-cols-[1.05fr_1fr] lg:items-start">
           <div className="max-w-[520px] text-white">
             <div className="mb-6 flex items-center gap-3">
@@ -121,12 +122,7 @@ export default function Footer() {
                 <ArrowUpRight size={16} />
               </Link>
 
-              <Link
-                href="/projects"
-                className="inline-flex h-12 items-center justify-center rounded-lg border border-white/40 px-5 text-xs font-black uppercase tracking-normal text-white transition-colors duration-200 hover:bg-white/10"
-              >
-                View Mandate
-              </Link>
+              <MandateLink />
             </div>
 
             <p className="mt-6 text-xs font-medium text-white/65">

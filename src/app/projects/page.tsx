@@ -248,9 +248,12 @@ export default function ProjectsPage() {
 
         {/* PROJECT CARDS */}
         <section
+          id="mandate"
+          aria-label="Governance mandate"
           className="
             relative
             z-20
+            scroll-mt-24
             px-6
             md:px-12
             lg:px-20

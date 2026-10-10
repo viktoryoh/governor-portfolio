@@ -16,10 +16,15 @@ button { cursor: pointer; }
 :focus-visible { outline: 3px solid #e67817; outline-offset: 5px; }
 #impact { scroll-margin-top: 100px; }
 
-.hero-section { height: calc(100svh - 32px); min-height: 560px; max-height: 1000px; }
+.hero-section { height: 100svh; min-height: 560px; }
 .hero-photo { object-position: 44% 24%; }
 .hero-readability-overlay {
   background: linear-gradient(180deg, transparent 30%, rgba(6,20,13,0.12) 48%, rgba(6,20,13,0.87) 100%);
+}
+.hero-name, .hero-headline {
+  font-family: "Clash Display", Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  font-synthesis: none;
 }
 .hero-headline {
   display: grid;
@@ -27,7 +32,6 @@ button { cursor: pointer; }
   max-width: 1000px;
   min-height: 112px;
   font-size: 46px;
-  font-weight: 900;
   line-height: 1.05;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -35,10 +39,20 @@ button { cursor: pointer; }
 .hero-scene { grid-area: 1 / 1; color: white; opacity: 0; visibility: hidden; }
 .hero-scene--continue { color: #ff9b42; }
 .hero-scene--result { font-size: 30px; line-height: 1.16; opacity: 1; visibility: visible; }
-.hero-line { display: block; }
+.hero-line { display: block; overflow: hidden; }
 .hero-word { display: inline-block; white-space: nowrap; }
 .hero-letter { display: inline-block; white-space: pre; opacity: 0; visibility: hidden; }
 .hero-scene--result .hero-letter { opacity: 1; visibility: visible; }
+.hero-phrase-accent {
+  display: block;
+  width: 72px;
+  height: 3px;
+  margin-top: 18px;
+  background: linear-gradient(90deg, #e67817, #ffc17a);
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left center;
+}
 
 .project-section { background: radial-gradient(circle at center, #dbe4db 0%, #bcc8bc 100%); }
 .project-track { display: grid; }
@@ -57,6 +71,9 @@ button { cursor: pointer; }
 .registration-field::placeholder { color: #66756b; }
 
 
+@media (max-width: 374px) {
+  .hero-headline { font-size: 42px; }
+}
 @media (min-width: 640px) {
   .hero-headline { font-size: 72px; min-height: 152px; }
   .hero-scene--result { font-size: 44px; }
@@ -128,5 +145,7 @@ select option { background: white; color: #0f172a; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
   .hero-scene { opacity: 0 !important; visibility: hidden !important; }
   .hero-scene--result, .hero-scene--result .hero-letter { opacity: 1 !important; visibility: visible !important; }
+  .hero-letter { transform: none !important; filter: none !important; text-shadow: none !important; }
+  .hero-phrase-accent { display: none; }
   [data-reveal] { opacity: 1 !important; transform: none !important; }
 }

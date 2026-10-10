@@ -1,0 +1,32 @@
+.dock { position: fixed; right: 32px; bottom: max(24px, env(safe-area-inset-bottom)); z-index: 2000; display: flex; align-items: center; gap: 12px; height: 64px; padding: 9px 16px 9px 10px; border: 1px solid #ffffff35; border-radius: 999px; background: #10241be6; color: white; backdrop-filter: blur(20px); box-shadow: 0 8px 30px #00000030; letter-spacing: 0; }
+.playButton, .muteButton, .settingsButton { display: grid; flex-shrink: 0; place-items: center; border: 1px solid #ffffff30; border-radius: 50%; background: #ffffff0a; color: white; transition: background 180ms ease, border-color 180ms ease; }
+.playButton { width: 44px; height: 44px; }
+.muteButton { width: 32px; height: 32px; }
+.playButton:hover, .playButton[aria-pressed="true"], .muteButton:hover, .settingsButton:hover, .settingsButton[aria-expanded="true"] { background: #038347; border-color: #7bca9e; }
+.settingsButton { display: none; }
+.settings { display: flex; align-items: center; gap: 8px; }
+.equalizer { display: flex; align-items: center; justify-content: center; gap: 3px; width: 26px; height: 24px; }
+.equalizer > span { width: 2px; height: 4px; border-radius: 1px; background: #85cda6; }
+.dock[data-playing="true"] .equalizer > span { animation: equalize 1.05s ease-in-out infinite alternate; }
+.equalizer > span:nth-child(2) { animation-delay: -0.35s; }
+.equalizer > span:nth-child(3) { animation-delay: -0.7s; }
+.equalizer > span:nth-child(4) { animation-delay: -0.15s; }
+.equalizer > span:nth-child(5) { animation-delay: -0.55s; }
+.volume { width: 76px; height: 32px; accent-color: #85cda6; cursor: pointer; }
+.error { position: absolute; right: 0; bottom: calc(100% + 12px); width: min(240px, calc(100vw - 32px)); margin: 0; padding: 12px; border: 1px solid #ffffff38; border-radius: 6px; background: #10241b; color: white; font-size: 12px; line-height: 1.5; }
+.loadingIcon { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes equalize { from { height: 4px; } to { height: 22px; } }
+@media (max-width: 767px) {
+  .dock { right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); height: 56px; gap: 4px; padding: 5px 7px; }
+  .equalizer { display: none; }
+  .settingsButton { display: grid; width: 32px; height: 32px; }
+  .settings { display: none; position: absolute; right: 0; bottom: calc(100% + 12px); width: 208px; padding: 12px; border: 1px solid #ffffff35; border-radius: 8px; background: #10241bf5; box-shadow: 0 8px 30px #00000030; backdrop-filter: blur(20px); }
+  .settings[data-open="true"] { display: flex; }
+  .muteButton { width: 44px; height: 44px; }
+  .volume { width: 128px; height: 44px; }
+  .dock:has(.settings[data-open="true"]) .error { bottom: 152px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dock *, .dock *::before, .dock *::after { animation: none !important; transition: none !important; }
+}
